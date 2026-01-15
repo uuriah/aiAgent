@@ -1,6 +1,7 @@
 import os
 import sys
 from pathlib import Path
+from google.genai import types
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from constants import MAX_CHARS
@@ -33,3 +34,17 @@ def get_file_content(working_directory, file_path):
 
     return file_content_string
 
+schema_get_file_content = types.FunctionDeclaration(
+    name="get_file_content",
+    description=f"Retrieves the content (at most {MAX_CHARS} characters)",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        required=["file_path"],
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="Path to the file to read, relative to the working directory",
+            ),  
+        },
+    ),
+)
